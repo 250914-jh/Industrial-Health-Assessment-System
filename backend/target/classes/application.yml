@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: industrial-health-backend
+  datasource:
+    url: jdbc:h2:mem:healthdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+# 业务配置：CSV 列名约定（如数据集列名不同，改这里即可）
+health:
+  feature-columns: temperature,vibration,current,rotation_speed
+  label-column: label
+  # 标签映射：将字符串标签映射到数值类别。可扩展。
+  label-mapping:
+    normal: 0
+    warning: 1
+    fault: 2
+  # 预警等级：哪些标签视为异常
+  alert-labels: warning,fault
+
+jwt:
+  secret: industrial-health-secret-key-please-change-in-production-1234567890
+  expire-hours: 12
+
+logging:
+  level:
+    com.industrial.health: INFO
